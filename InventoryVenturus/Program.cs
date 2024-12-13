@@ -1,3 +1,8 @@
+using InventoryVenturus.Data;
+using InventoryVenturus.Data.Interfaces;
+using InventoryVenturus.Repositories;
+using InventoryVenturus.Repositories.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IDataContext, DataContext>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 var app = builder.Build();
+
+// Initialize database
+var dataContext = app.Services.GetRequiredService<IDataContext>();
+await dataContext.InitDatabase();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
