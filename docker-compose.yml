@@ -1,0 +1,6 @@
+services:
+  inventoryventurus:
+    image: ${DOCKER_REGISTRY-}inventoryventurus
+    build:
+      context: .
+      dockerfile: InventoryVenturus/Dockerfile
