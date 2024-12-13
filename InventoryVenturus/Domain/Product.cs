@@ -10,15 +10,14 @@ namespace InventoryVenturus.Domain
 
         public string Name { get; set; } = default!;
 
-        public decimal Price { get; set; }
+        public decimal Price { get; set; } = 0;
 
         public Product() { }
-        public Product(string name, string partnumber, decimal price)
+        public Product(string name, string partnumber)
         {
             Id = Guid.NewGuid();
             Name = name;
             Partnumber = partnumber;
-            Price = price;
         }
     }
 }
