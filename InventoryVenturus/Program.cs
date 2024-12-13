@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IDataContext, DataContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 
