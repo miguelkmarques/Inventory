@@ -46,7 +46,7 @@ try
     builder.Services.AddProblemDetails();
 
     var app = builder.Build();
-
+    app.UseSerilogRequestLogging();
     app.UseExceptionHandler();
 
     // Initialize database
