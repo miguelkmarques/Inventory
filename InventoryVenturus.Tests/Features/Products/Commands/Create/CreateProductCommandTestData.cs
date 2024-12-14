@@ -10,18 +10,18 @@ namespace InventoryVenturus.Tests.Features.Products.Commands.Create
     public class CreateProductCommandTestData
     {
         public static CreateProductCommand ValidCommand =>
-            new ("ValidPartnumber", "ValidName");
+            new ("PartNumber001", "Product1");
 
         public static CreateProductCommand EmptyNameCommand =>
-            new ("ValidPartnumber", "");
+            new ("PartNumber001", "");
 
         public static CreateProductCommand LongNameCommand =>
-            new ("ValidPartnumber", new string('A', 256));
+            new ("PartNumber001", new string('A', 256));
 
         public static CreateProductCommand EmptyPartnumberCommand =>
-            new ("", "ValidName");
+            new ("", "Product1");
 
         public static CreateProductCommand LongPartnumberCommand =>
-            new(new string('A', 256), "ValidName");
+            new(new string('A', 256), "Product1");
     }
 }

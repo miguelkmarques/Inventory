@@ -1,6 +1,7 @@
 ﻿using InventoryVenturus.Features.Products.Commands.Create;
 using InventoryVenturus.Features.Products.Dtos;
 using InventoryVenturus.Features.Products.Queries.Get;
+using InventoryVenturus.Features.Products.Queries.List;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,64 @@ namespace InventoryVenturus.Controllers
             {
                 return NotFound();
             }
-            return product;
+            return Ok(product);
         }
+
+        /// <summary>
+        /// Lists all products.
+        /// </summary>
+        /// <returns>A list of products.</returns>
+        [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, "The products were retrieved successfully.", typeof(IEnumerable<ProductDto>))]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> ListProducts()
+        {
+            var products = await mediator.Send(new ListProductsQuery());
+            return Ok(products);
+        }
+
+        ///// <summary>
+        ///// Updates an existing product.
+        ///// </summary>
+        ///// <param name="id">The ID of the product to update.</param>
+        ///// <param name="command">The command to update the product.</param>
+        ///// <returns>No content.</returns>
+        //[HttpPut("{id}")]
+        //[SwaggerResponse(StatusCodes.Status204NoContent, "The product was updated successfully.")]
+        //[SwaggerResponse(StatusCodes.Status400BadRequest, "The request is invalid.", typeof(ProblemDetails))]
+        //[SwaggerResponse(StatusCodes.Status404NotFound, "The product was not found.", typeof(ProblemDetails))]
+        //public async Task<ActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+        //{
+        //    if (id != command.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    var result = await mediator.Send(command);
+        //    if (!result)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return NoContent();
+        //}
+
+        ///// <summary>
+        ///// Deletes a product by ID.
+        ///// </summary>
+        ///// <param name="id">The ID of the product to delete.</param>
+        ///// <returns>No content.</returns>
+        //[HttpDelete("{id}")]
+        //[SwaggerResponse(StatusCodes.Status204NoContent, "The product was deleted successfully.")]
+        //[SwaggerResponse(StatusCodes.Status404NotFound, "The product was not found.", typeof(ProblemDetails))]
+        //public async Task<ActionResult> DeleteProduct(Guid id)
+        //{
+        //    var result = await mediator.Send(new DeleteProductCommand(id));
+        //    if (!result)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return NoContent();
+        //}
     }
 }
