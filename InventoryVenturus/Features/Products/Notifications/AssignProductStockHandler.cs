@@ -11,7 +11,7 @@ namespace InventoryVenturus.Features.Products.Notifications
         {
             try
             {
-                var stock = new Stock(notification.Id, 0);
+                var stock = new Domain.Stock(notification.Id, 0);
 
                 await stockRepository.AddStockAsync(stock);
 

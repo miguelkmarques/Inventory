@@ -34,20 +34,22 @@ namespace InventoryVenturus.Repositories
             await dbConnection.ExecuteAsync(query, transaction);
         }
 
-        public async Task UpdateTransactionAsync(Transaction transaction)
+        public async Task<bool> UpdateTransactionAsync(Transaction transaction)
         {
             using IDbConnection dbConnection = Connection;
             string query = "UPDATE Transactions SET ProductId = @ProductId, Quantity = @Quantity, TransactionDate = @TransactionDate, TransactionType = @TransactionType, Cost = @Cost WHERE Id = @Id";
             dbConnection.Open();
-            await dbConnection.ExecuteAsync(query, transaction);
+            var rowsAffected = await dbConnection.ExecuteAsync(query, transaction);
+            return rowsAffected > 0;
         }
 
-        public async Task DeleteTransactionAsync(Guid id)
+        public async Task<bool> DeleteTransactionAsync(Guid id)
         {
             using IDbConnection dbConnection = Connection;
             string query = "DELETE FROM Transactions WHERE Id = @Id";
             dbConnection.Open();
-            await dbConnection.ExecuteAsync(query, new { Id = id });
+            var rowsAffected = await dbConnection.ExecuteAsync(query, new { Id = id });
+            return rowsAffected > 0;
         }
     }
 }

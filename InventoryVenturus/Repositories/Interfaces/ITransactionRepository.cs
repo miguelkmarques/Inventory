@@ -10,8 +10,8 @@ namespace InventoryVenturus.Repositories.Interfaces
 
         Task AddTransactionAsync(Transaction transaction);
 
-        Task UpdateTransactionAsync(Transaction transaction);
+        Task<bool> UpdateTransactionAsync(Transaction transaction);
 
-        Task DeleteTransactionAsync(Guid id);
+        Task<bool> DeleteTransactionAsync(Guid id);
     }
 }
