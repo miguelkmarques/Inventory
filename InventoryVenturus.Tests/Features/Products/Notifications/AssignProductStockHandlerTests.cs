@@ -29,14 +29,14 @@ namespace InventoryVenturus.Tests.Features.Products.Notifications
         {
             // Arrange
             var notification = new ProductCreatedNotification(Guid.NewGuid());
-            _stockRepositoryMock.Setup(repo => repo.AddStockAsync(It.IsAny<Stock>()))
+            _stockRepositoryMock.Setup(repo => repo.AddStockAsync(It.IsAny<Domain.Stock>()))
                                 .Returns(Task.CompletedTask);
 
             // Act
             await _handler.Handle(notification, CancellationToken.None);
 
             // Assert
-            _stockRepositoryMock.Verify(repo => repo.AddStockAsync(It.Is<Stock>(s => s.ProductId == notification.Id && s.Quantity == 0)), Times.Once);
+            _stockRepositoryMock.Verify(repo => repo.AddStockAsync(It.Is<Domain.Stock>(s => s.ProductId == notification.Id && s.Quantity == 0)), Times.Once);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace InventoryVenturus.Tests.Features.Products.Notifications
             // Arrange
             var notification = new ProductCreatedNotification(Guid.NewGuid());
             var exception = new Exception("Test exception");
-            _stockRepositoryMock.Setup(repo => repo.AddStockAsync(It.IsAny<Stock>()))
+            _stockRepositoryMock.Setup(repo => repo.AddStockAsync(It.IsAny<Domain.Stock>()))
                                 .ThrowsAsync(exception);
 
             // Act & Assert

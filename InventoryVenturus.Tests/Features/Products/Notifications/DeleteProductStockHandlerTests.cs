@@ -29,7 +29,7 @@ namespace InventoryVenturus.Tests.Features.Products.Notifications
         {
             // Arrange
             var notification = new ProductDeletionRequestedNotification(Guid.NewGuid());
-            var stock = new Stock(Guid.NewGuid(), 0)
+            var stock = new Domain.Stock(Guid.NewGuid(), 0)
             {
                 ProductId = notification.Id
             };
@@ -49,7 +49,7 @@ namespace InventoryVenturus.Tests.Features.Products.Notifications
         {
             // Arrange
             var notification = new ProductDeletionRequestedNotification(Guid.NewGuid());
-            _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(notification.Id)).ReturnsAsync((Stock?)null);
+            _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(notification.Id)).ReturnsAsync((Domain.Stock?)null);
 
             // Act
             await _handler.Handle(notification, CancellationToken.None);
