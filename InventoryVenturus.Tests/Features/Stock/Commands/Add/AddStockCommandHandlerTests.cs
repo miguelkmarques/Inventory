@@ -27,7 +27,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Commands.Add
         public async Task Handle_ShouldIncreaseStockAndReturnTrue()
         {
             // Arrange
-            var command = new AddStockCommand(Guid.NewGuid(), 10, 100m);
+            var command = new AddStockCommand(Guid.NewGuid(), 10, 120);
             var existingStock = new Domain.Stock(command.ProductId, 5);
             _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(command.ProductId)).ReturnsAsync(existingStock);
             _stockRepositoryMock.Setup(repo => repo.UpdateStockAsync(It.IsAny<Domain.Stock>())).ReturnsAsync(true);
@@ -45,7 +45,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Commands.Add
         public async Task Handle_ShouldReturnFalse_WhenUpdateStockFails()
         {
             // Arrange
-            var command = new AddStockCommand(Guid.NewGuid(), 10, 100m);
+            var command = new AddStockCommand(Guid.NewGuid(), 10, 120);
             var existingStock = new Domain.Stock(command.ProductId, 5);
             _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(command.ProductId)).ReturnsAsync(existingStock);
             _stockRepositoryMock.Setup(repo => repo.UpdateStockAsync(It.IsAny<Domain.Stock>())).ReturnsAsync(false);
@@ -61,7 +61,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Commands.Add
         public async Task Handle_ShouldThrowException_WhenStockRepositoryFails()
         {
             // Arrange
-            var command = new AddStockCommand(Guid.NewGuid(), 10, 100m);
+            var command = new AddStockCommand(Guid.NewGuid(), 10, 120);
             _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(command.ProductId)).ThrowsAsync(new Exception("Repository failure"));
 
             // Act & Assert

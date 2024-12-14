@@ -62,7 +62,7 @@ namespace InventoryVenturus.Tests.Controllers
         public async Task AddStock_ReturnsNoContent_WhenAddIsSuccessful()
         {
             // Arrange
-            var command = new AddStockCommand(Guid.NewGuid(), 10, 100m);
+            var command = new AddStockCommand(Guid.NewGuid(), 10, 120);
             _mediatorMock.Setup(m => m.Send(It.IsAny<AddStockCommand>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync(true);
 

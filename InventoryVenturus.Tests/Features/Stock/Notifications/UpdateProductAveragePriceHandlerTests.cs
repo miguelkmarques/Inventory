@@ -46,7 +46,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
         public async Task Handle_ShouldNotUpdateAveragePrice_WhenUpdateAveragePriceFails()
         {
             // Arrange
-            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 100m);
+            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 120);
             var existingProduct = new Product("Test Product", "TP123") { Id = notification.ProductId, Price = 80m };
             _productRepositoryMock.Setup(repo => repo.GetProductByIdAsync(notification.ProductId)).ReturnsAsync(existingProduct);
             _productRepositoryMock.Setup(repo => repo.UpdateAveragePriceAsync(notification.ProductId, It.IsAny<decimal>())).ReturnsAsync(false);
@@ -62,7 +62,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
         public async Task Handle_ShouldThrowException_WhenExceptionIsThrown()
         {
             // Arrange
-            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 100m);
+            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 120);
             _productRepositoryMock.Setup(repo => repo.GetProductByIdAsync(notification.ProductId)).ThrowsAsync(new Exception("Repository failure"));
 
             // Act

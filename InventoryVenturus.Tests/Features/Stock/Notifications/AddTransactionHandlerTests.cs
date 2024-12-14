@@ -29,7 +29,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
         public async Task Handle_ShouldAddTransaction_WhenStockAddedNotificationIsReceived()
         {
             // Arrange
-            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 100m);
+            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 120);
             _transactionRepositoryMock.Setup(repo => repo.AddTransactionAsync(It.IsAny<Transaction>())).Returns(Task.CompletedTask);
 
             // Act
@@ -48,7 +48,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
         public async Task Handle_ShouldLogError_WhenExceptionIsThrown()
         {
             // Arrange
-            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 100m);
+            var notification = new StockAddedNotification(Guid.NewGuid(), 10, 30, 120);
             _transactionRepositoryMock.Setup(repo => repo.AddTransactionAsync(It.IsAny<Transaction>())).ThrowsAsync(new Exception("Repository failure"));
 
             // Act & Assert
