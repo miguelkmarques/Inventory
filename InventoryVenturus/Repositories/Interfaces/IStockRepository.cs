@@ -6,12 +6,12 @@ namespace InventoryVenturus.Repositories.Interfaces
     {
         Task<IEnumerable<Stock>> GetAllStockAsync();
 
-        Task<Stock?> GetStockByIdAsync(Guid id);
+        Task<Stock?> GetStockByProductIdAsync(Guid productId);
 
         Task AddStockAsync(Stock stock);
 
-        Task UpdateStockAsync(Stock stock);
+        Task<bool> UpdateStockAsync(Stock stock);
 
-        Task DeleteStockAsync(Guid id);
+        Task<bool> DeleteStockAsync(Guid id);
     }
 }

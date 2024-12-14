@@ -18,12 +18,12 @@ namespace InventoryVenturus.Repositories
             return await dbConnection.QueryAsync<Stock>(query);
         }
 
-        public async Task<Stock?> GetStockByIdAsync(Guid id)
+        public async Task<Stock?> GetStockByProductIdAsync(Guid productId)
         {
             using IDbConnection dbConnection = Connection;
-            string query = "SELECT * FROM Stock WHERE Id = @Id";
+            string query = "SELECT * FROM Stock WHERE ProductId = @ProductId";
             dbConnection.Open();
-            return await dbConnection.QueryFirstOrDefaultAsync<Stock>(query, new { Id = id });
+            return await dbConnection.QueryFirstOrDefaultAsync<Stock>(query, new { ProductId = productId });
         }
 
         public async Task AddStockAsync(Stock stock)
@@ -34,20 +34,22 @@ namespace InventoryVenturus.Repositories
             await dbConnection.ExecuteAsync(query, stock);
         }
 
-        public async Task UpdateStockAsync(Stock stock)
+        public async Task<bool> UpdateStockAsync(Stock stock)
         {
             using IDbConnection dbConnection = Connection;
             string query = "UPDATE Stock SET ProductId = @ProductId, Quantity = @Quantity WHERE Id = @Id";
             dbConnection.Open();
-            await dbConnection.ExecuteAsync(query, stock);
+            var rowsAffected = await dbConnection.ExecuteAsync(query, stock);
+            return rowsAffected > 0;
         }
 
-        public async Task DeleteStockAsync(Guid id)
+        public async Task<bool> DeleteStockAsync(Guid id)
         {
             using IDbConnection dbConnection = Connection;
             string query = "DELETE FROM Stock WHERE Id = @Id";
             dbConnection.Open();
-            await dbConnection.ExecuteAsync(query, new { Id = id });
+            var rowsAffected = await dbConnection.ExecuteAsync(query, new { Id = id });
+            return rowsAffected > 0;
         }
     }
 }
