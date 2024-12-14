@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InventoryVenturus.Tests.Handlers.Products
+namespace InventoryVenturus.Tests.Features.Products.Commands.Create
 {
     public class CreateProductCommandHandlerTests
     {
@@ -25,7 +25,7 @@ namespace InventoryVenturus.Tests.Handlers.Products
         public async Task Handle_ShouldAddProductAndReturnProductId()
         {
             // Arrange
-            var command = new CreateProductCommand("Part123", "ProductName");
+            var command = CreateProductCommandTestData.ValidCommand;
             var productId = Guid.NewGuid();
             _productRepositoryMock.Setup(repo => repo.AddProductAsync(It.IsAny<Product>()))
                 .Callback<Product>(product => product.Id = productId)

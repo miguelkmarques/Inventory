@@ -26,7 +26,7 @@ namespace InventoryVenturus.Tests.Controllers
         public async Task CreateProduct_ReturnsCreatedAtActionResult()
         {
             // Arrange
-            var command = new CreateProductCommand("Part123", "ProductName");
+            var command = new CreateProductCommand("Part123", "");
             var productId = Guid.NewGuid();
             _mediatorMock.Setup(m => m.Send(It.IsAny<CreateProductCommand>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync(productId);
