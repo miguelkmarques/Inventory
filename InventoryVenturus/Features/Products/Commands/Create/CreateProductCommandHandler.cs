@@ -3,7 +3,7 @@ using InventoryVenturus.Repositories.Interfaces;
 using MediatR;
 using System;
 
-namespace InventoryVenturus.Features.Products.Commands
+namespace InventoryVenturus.Features.Products.Commands.Create
 {
     public class CreateProductCommandHandler(IProductRepository productRepository) : IRequestHandler<CreateProductCommand, Guid>
     {

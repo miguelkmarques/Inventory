@@ -1,5 +1,5 @@
 ﻿using InventoryVenturus.Domain;
-using InventoryVenturus.Features.Products.Commands;
+using InventoryVenturus.Features.Products.Commands.Create;
 using InventoryVenturus.Repositories.Interfaces;
 using Moq;
 using System;

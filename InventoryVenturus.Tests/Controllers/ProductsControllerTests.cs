@@ -1,5 +1,5 @@
 ﻿using InventoryVenturus.Controllers;
-using InventoryVenturus.Features.Products.Commands;
+using InventoryVenturus.Features.Products.Commands.Create;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
