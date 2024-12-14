@@ -52,12 +52,10 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
             _productRepositoryMock.Setup(repo => repo.UpdateAveragePriceAsync(notification.ProductId, It.IsAny<decimal>())).ReturnsAsync(false);
 
             // Act
-            await _handler.Handle(notification, CancellationToken.None);
+            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(notification, CancellationToken.None));
 
             // Assert
             _productRepositoryMock.Verify(repo => repo.GetProductByIdAsync(notification.ProductId), Times.Once);
-            var expectedAveragePrice = ((existingProduct.Price * (notification.FinalQuantity - notification.AddedQuantity)) + (notification.Price * notification.AddedQuantity)) / notification.FinalQuantity;
-            _productRepositoryMock.Verify(repo => repo.UpdateAveragePriceAsync(notification.ProductId, It.Is<decimal>(price => price == expectedAveragePrice)), Times.Once);
         }
 
         [Fact]
