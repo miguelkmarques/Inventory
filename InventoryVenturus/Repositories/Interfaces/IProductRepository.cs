@@ -10,8 +10,10 @@ namespace InventoryVenturus.Repositories.Interfaces
 
         Task AddProductAsync(Product product);
 
-        Task UpdateProductAsync(Product product);
+        Task<bool> UpdateProductAsync(Product product);
 
-        Task DeleteProductAsync(Guid id);
+        Task<bool> UpdateAveragePriceAsync(Guid id, decimal price);
+
+        Task<bool> DeleteProductAsync(Guid id);
     }
 }

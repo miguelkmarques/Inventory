@@ -1,4 +1,6 @@
 ﻿using InventoryVenturus.Features.Products.Commands.Create;
+using InventoryVenturus.Features.Products.Commands.Delete;
+using InventoryVenturus.Features.Products.Commands.Update;
 using InventoryVenturus.Features.Products.Dtos;
 using InventoryVenturus.Features.Products.Queries.Get;
 using InventoryVenturus.Features.Products.Queries.List;
@@ -59,49 +61,49 @@ namespace InventoryVenturus.Controllers
             return Ok(products);
         }
 
-        ///// <summary>
-        ///// Updates an existing product.
-        ///// </summary>
-        ///// <param name="id">The ID of the product to update.</param>
-        ///// <param name="command">The command to update the product.</param>
-        ///// <returns>No content.</returns>
-        //[HttpPut("{id}")]
-        //[SwaggerResponse(StatusCodes.Status204NoContent, "The product was updated successfully.")]
-        //[SwaggerResponse(StatusCodes.Status400BadRequest, "The request is invalid.", typeof(ProblemDetails))]
-        //[SwaggerResponse(StatusCodes.Status404NotFound, "The product was not found.", typeof(ProblemDetails))]
-        //public async Task<ActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
-        //{
-        //    if (id != command.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        /// <summary>
+        /// Updates an existing product.
+        /// </summary>
+        /// <param name="id">The ID of the product to update.</param>
+        /// <param name="command">The command to update the product.</param>
+        /// <returns>No content.</returns>
+        [HttpPut("{id}")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "The product was updated successfully.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "The request is invalid.", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "The product was not found.", typeof(ProblemDetails))]
+        public async Task<ActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
 
-        //    var result = await mediator.Send(command);
-        //    if (!result)
-        //    {
-        //        return NotFound();
-        //    }
+            var result = await mediator.Send(command);
+            if (!result)
+            {
+                return NotFound();
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
-        ///// <summary>
-        ///// Deletes a product by ID.
-        ///// </summary>
-        ///// <param name="id">The ID of the product to delete.</param>
-        ///// <returns>No content.</returns>
-        //[HttpDelete("{id}")]
-        //[SwaggerResponse(StatusCodes.Status204NoContent, "The product was deleted successfully.")]
-        //[SwaggerResponse(StatusCodes.Status404NotFound, "The product was not found.", typeof(ProblemDetails))]
-        //public async Task<ActionResult> DeleteProduct(Guid id)
-        //{
-        //    var result = await mediator.Send(new DeleteProductCommand(id));
-        //    if (!result)
-        //    {
-        //        return NotFound();
-        //    }
+        /// <summary>
+        /// Deletes a product by ID.
+        /// </summary>
+        /// <param name="id">The ID of the product to delete.</param>
+        /// <returns>No content.</returns>
+        [HttpDelete("{id}")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "The product was deleted successfully.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "The product was not found.", typeof(ProblemDetails))]
+        public async Task<ActionResult> DeleteProduct(Guid id)
+        {
+            var result = await mediator.Send(new DeleteProductCommand(id));
+            if (!result)
+            {
+                return NotFound();
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
     }
 }

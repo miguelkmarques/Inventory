@@ -1,9 +1,12 @@
 ﻿using InventoryVenturus.Controllers;
 using InventoryVenturus.Features.Products.Commands.Create;
+using InventoryVenturus.Features.Products.Commands.Delete;
+using InventoryVenturus.Features.Products.Commands.Update;
 using InventoryVenturus.Features.Products.Dtos;
 using InventoryVenturus.Features.Products.Queries.Get;
 using InventoryVenturus.Features.Products.Queries.List;
 using InventoryVenturus.Tests.Features.Products.Commands.Create;
+using InventoryVenturus.Tests.Features.Products.Commands.Update;
 using InventoryVenturus.Tests.Features.Products.TestData;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -111,6 +114,85 @@ namespace InventoryVenturus.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
             Assert.Equal(products, okResult.Value);
+        }
+
+        [Fact]
+        public async Task UpdateProduct_ReturnsNoContent_WhenUpdateIsSuccessful()
+        {
+            // Arrange
+            var command = UpdateProductCommandTestData.ValidCommand;
+            _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
+                         .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.UpdateProduct(command.Id, command);
+
+            // Assert
+            var noContentResult = Assert.IsType<NoContentResult>(result);
+            Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateProduct_ReturnsBadRequest_WhenIdMismatch()
+        {
+            // Arrange
+            var command = UpdateProductCommandTestData.ValidCommand;
+            var differentId = Guid.NewGuid();
+
+            // Act
+            var result = await _controller.UpdateProduct(differentId, command);
+
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateProduct_ReturnsNotFound_WhenUpdateFails()
+        {
+            // Arrange
+            var command = UpdateProductCommandTestData.ValidCommand;
+            _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
+                         .ReturnsAsync(false);
+
+            // Act
+            var result = await _controller.UpdateProduct(command.Id, command);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteProduct_ReturnsNoContent_WhenDeleteIsSuccessful()
+        {
+            // Arrange
+            var productId = Guid.NewGuid();
+            _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProductCommand>(), It.IsAny<CancellationToken>()))
+                         .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.DeleteProduct(productId);
+
+            // Assert
+            var noContentResult = Assert.IsType<NoContentResult>(result);
+            Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteProduct_ReturnsNotFound_WhenDeleteFails()
+        {
+            // Arrange
+            var productId = Guid.NewGuid();
+            _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProductCommand>(), It.IsAny<CancellationToken>()))
+                         .ReturnsAsync(false);
+
+            // Act
+            var result = await _controller.DeleteProduct(productId);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
         }
     }
 }
