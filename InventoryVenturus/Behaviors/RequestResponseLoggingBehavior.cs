@@ -12,14 +12,19 @@ namespace InventoryVenturus.Behaviors
             var correlationId = Guid.NewGuid();
 
             // Request Logging
+            // Serialize the request
+            var requestType = typeof(TRequest).Name;
+            var requestJson = JsonSerializer.Serialize(request);
             // Log the serialized request
-            logger.LogInformation("Handling request {CorrelationID}: {Request}", correlationId, request);
+            logger.LogInformation("Handling request {CorrelationID}: {RequestType} {Request}", correlationId, requestType, requestJson);
 
             // Response logging
             var response = await next();
             // Serialize the response
+            var responseType = typeof(TResponse).Name;
+            var responseJson = JsonSerializer.Serialize(response);
             // Log the serialized response
-            logger.LogInformation("Response for {Correlation}: {Response}", correlationId, response);
+            logger.LogInformation("Response for {CorrelationID}: {ResponseType} {Response}", correlationId, responseType, responseJson);
 
             // Return response
             return response;

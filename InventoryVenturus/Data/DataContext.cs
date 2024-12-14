@@ -21,6 +21,7 @@ namespace InventoryVenturus.Data
             await CreateProductsTableAsync(connection);
             await CreateTransactionsTableAsync(connection);
             await CreateStockTableAsync(connection);
+            await CreateErrorLogsTableAsync(connection);
         }
 
         private static async Task CreateProductsTableAsync(IDbConnection connection)
@@ -64,6 +65,21 @@ namespace InventoryVenturus.Data
                     FOREIGN KEY (ProductId) REFERENCES Products(Id)
                 )";
 
+            await connection.ExecuteAsync(query);
+        }
+
+        private static async Task CreateErrorLogsTableAsync(IDbConnection connection)
+        {
+            string query = @"
+                CREATE TABLE IF NOT EXISTS ErrorLogs (
+                    Id CHAR(36) NOT NULL,
+                    CorrelationId CHAR(36) NOT NULL,
+                    RequestType VARCHAR(255),
+                    Request TEXT,
+                    Exception TEXT,
+                    Timestamp DATETIME NOT NULL,
+                    PRIMARY KEY (Id)
+                )";
             await connection.ExecuteAsync(query);
         }
     }
