@@ -1,6 +1,0 @@
-@InventoryVenturus_HostAddress = https://localhost:5129
-
-GET {{InventoryVenturus_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
