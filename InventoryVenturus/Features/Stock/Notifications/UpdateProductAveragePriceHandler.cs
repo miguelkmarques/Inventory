@@ -13,7 +13,7 @@ namespace InventoryVenturus.Features.Stock.Notifications
             {
                 var existingProduct = await productRepository.GetProductByIdAsync(notification.ProductId) ?? throw new ProductNotFoundException(notification.ProductId);
 
-                var updatedAveragePrice = ((existingProduct.Price * (notification.FinalQuantity - notification.AddedQuantity)) + (notification.UnitPrice * notification.AddedQuantity)) / notification.FinalQuantity;
+                var updatedAveragePrice = CalculateUpdatedAveragePrice(existingProduct.Price, notification.AddedQuantity, notification.FinalQuantity, notification.UnitPrice);
 
                 var result = await productRepository.UpdateAveragePriceAsync(existingProduct.Id, updatedAveragePrice);
                 if (!result)
@@ -27,6 +27,12 @@ namespace InventoryVenturus.Features.Stock.Notifications
                 logger.LogError(ex, "Error updating Product Average Price for product with ID: {Id}", notification.ProductId);
                 throw;
             }
+        }
+
+        private static decimal CalculateUpdatedAveragePrice(decimal currentPrice, int addedQuantity, int finalQuantity, decimal unitPrice)
+        {
+            var updatedAveragePrice = ((currentPrice * (finalQuantity - addedQuantity)) + (unitPrice * addedQuantity)) / finalQuantity;
+            return Math.Round(updatedAveragePrice, 2);
         }
     }
 }

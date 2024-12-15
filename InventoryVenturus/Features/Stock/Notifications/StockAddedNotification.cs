@@ -23,7 +23,8 @@ namespace InventoryVenturus.Features.Stock.Notifications
 
             RuleFor(x => x.UnitPrice)
                 .NotEmpty().WithMessage("Price is required.")
-                .GreaterThan(0).WithMessage("Price must be greater than 0.");
+                .GreaterThan(0).WithMessage("Price must be greater than 0.")
+                .PrecisionScale(18, 2, true).WithMessage("UnitPrice must have no more than 2 decimal places.");
         }
     }
 
