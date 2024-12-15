@@ -38,5 +38,12 @@ namespace InventoryVenturus.Features.Common
                 .GreaterThan(0).WithMessage($"{name} must be greater than 0.")
                 .PrecisionScale(18, 2, true).WithMessage($"{name} must have no more than 2 decimal places.");
         }
+
+        public static IRuleBuilderOptions<T, DateTime> ValidateQueryDate<T>(this IRuleBuilder<T, DateTime> ruleBuilder, string name = "Date")
+        {
+            return ruleBuilder
+                .NotEmpty().WithMessage($"{name} is required.")
+                .LessThanOrEqualTo(DateTime.UtcNow.Date).WithMessage($"{name} cannot be in the future.");
+        }
     }
 }

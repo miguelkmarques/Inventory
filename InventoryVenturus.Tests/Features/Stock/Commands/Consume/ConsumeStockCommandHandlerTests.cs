@@ -54,8 +54,8 @@ namespace InventoryVenturus.Tests.Features.Stock.Commands.Consume
         {
             // Arrange
             var command = new ConsumeStockCommand(Guid.NewGuid(), 5);
-            _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(command.ProductId)).ReturnsAsync((Domain.Stock)null);
-            _productRepositoryMock.Setup(repo => repo.GetProductByIdAsync(command.ProductId)).ReturnsAsync((Domain.Product)null);
+            _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(command.ProductId)).ReturnsAsync((Domain.Stock?)null);
+            _productRepositoryMock.Setup(repo => repo.GetProductByIdAsync(command.ProductId)).ReturnsAsync((Domain.Product?)null);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
