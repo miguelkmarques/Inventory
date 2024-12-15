@@ -10,21 +10,14 @@ namespace InventoryVenturus.Repositories
     {
         private IDbConnection Connection => dataContext.CreateConnection();
 
-        public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
+        public async Task<IEnumerable<Transaction>> GetTransactionsByDateAsync(DateTime date)
         {
             using IDbConnection dbConnection = Connection;
-            string query = "SELECT * FROM Transactions";
+            string query = "SELECT * FROM Transactions WHERE CAST(TransactionDate AS DATE) = @Date";
             dbConnection.Open();
-            return await dbConnection.QueryAsync<Transaction>(query);
+            return await dbConnection.QueryAsync<Transaction>(query, new { date.Date });
         }
 
-        public async Task<Transaction?> GetTransactionByIdAsync(Guid id)
-        {
-            using IDbConnection dbConnection = Connection;
-            string query = "SELECT * FROM Transactions WHERE Id = @Id";
-            dbConnection.Open();
-            return await dbConnection.QueryFirstOrDefaultAsync<Transaction>(query, new { Id = id });
-        }
 
         public async Task AddTransactionAsync(Transaction transaction)
         {
@@ -32,24 +25,6 @@ namespace InventoryVenturus.Repositories
             string query = "INSERT INTO Transactions (Id, ProductId, Quantity, TransactionDate, TransactionType, Cost) VALUES (@Id, @ProductId, @Quantity, @TransactionDate, @TransactionType, @Cost)";
             dbConnection.Open();
             await dbConnection.ExecuteAsync(query, transaction);
-        }
-
-        public async Task<bool> UpdateTransactionAsync(Transaction transaction)
-        {
-            using IDbConnection dbConnection = Connection;
-            string query = "UPDATE Transactions SET ProductId = @ProductId, Quantity = @Quantity, TransactionDate = @TransactionDate, TransactionType = @TransactionType, Cost = @Cost WHERE Id = @Id";
-            dbConnection.Open();
-            var rowsAffected = await dbConnection.ExecuteAsync(query, transaction);
-            return rowsAffected > 0;
-        }
-
-        public async Task<bool> DeleteTransactionAsync(Guid id)
-        {
-            using IDbConnection dbConnection = Connection;
-            string query = "DELETE FROM Transactions WHERE Id = @Id";
-            dbConnection.Open();
-            var rowsAffected = await dbConnection.ExecuteAsync(query, new { Id = id });
-            return rowsAffected > 0;
         }
     }
 }

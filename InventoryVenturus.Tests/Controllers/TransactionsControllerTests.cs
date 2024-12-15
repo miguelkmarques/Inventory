@@ -30,7 +30,7 @@ namespace InventoryVenturus.Tests.Controllers
             var date = DateTime.Today;
             var dailyConsumption = new List<DailyConsumptionDto>
             {
-                new(Guid.NewGuid(), 10, 100)
+                new(Guid.NewGuid(), 10, 100, 12)
             };
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetDailyConsumptionQuery>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync(dailyConsumption);
@@ -68,7 +68,7 @@ namespace InventoryVenturus.Tests.Controllers
             // Arrange
             var dailyConsumption = new List<DailyConsumptionDto>
             {
-                new(Guid.NewGuid(), 10, 100.0m)
+                new(Guid.NewGuid(), 10, 100, 12)
             };
             _mediatorMock.Setup(m => m.Send(It.Is<GetDailyConsumptionQuery>(q => q.Date == DateTime.UtcNow.Date), It.IsAny<CancellationToken>()))
                          .ReturnsAsync(dailyConsumption);

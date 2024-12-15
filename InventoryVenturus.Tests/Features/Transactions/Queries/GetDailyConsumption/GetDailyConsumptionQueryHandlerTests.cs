@@ -34,7 +34,7 @@ namespace InventoryVenturus.Tests.Features.Transactions.Queries.GetDailyConsumpt
                 new(Guid.NewGuid(), 3, TransactionType.Consumption, date, 12)
             };
 
-            _transactionRepositoryMock.Setup(repo => repo.GetAllTransactionsAsync())
+            _transactionRepositoryMock.Setup(repo => repo.GetTransactionsByDateAsync(date))
                 .ReturnsAsync(transactions);
 
             var query = new GetDailyConsumptionQuery(date);
@@ -49,8 +49,8 @@ namespace InventoryVenturus.Tests.Features.Transactions.Queries.GetDailyConsumpt
             var firstProduct = result.FirstOrDefault(r => r.ProductId == productId);
             Assert.NotNull(firstProduct);
             Assert.Equal(15, firstProduct.Quantity);
-            Assert.Equal(155m, firstProduct.TotalPrice);
-            Assert.Equal(10.33m, Math.Round(firstProduct.AverageUnitPrice, 2));
+            Assert.Equal(155, firstProduct.TotalPrice);
+            Assert.Equal(10.33m, firstProduct.AverageUnitPrice);
 
             var secondProduct = result.FirstOrDefault(r => r.ProductId != productId);
             Assert.NotNull(secondProduct);
@@ -65,7 +65,7 @@ namespace InventoryVenturus.Tests.Features.Transactions.Queries.GetDailyConsumpt
             var date = new DateTime(2024, 12, 15);
             var transactions = new List<Transaction>();
 
-            _transactionRepositoryMock.Setup(repo => repo.GetAllTransactionsAsync())
+            _transactionRepositoryMock.Setup(repo => repo.GetTransactionsByDateAsync(date))
                 .ReturnsAsync(transactions);
 
             var query = new GetDailyConsumptionQuery(date);

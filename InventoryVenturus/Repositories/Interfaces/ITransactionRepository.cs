@@ -4,14 +4,8 @@ namespace InventoryVenturus.Repositories.Interfaces
 {
     public interface ITransactionRepository
     {
-        Task<IEnumerable<Transaction>> GetAllTransactionsAsync();
-
-        Task<Transaction?> GetTransactionByIdAsync(Guid id);
+        Task<IEnumerable<Transaction>> GetTransactionsByDateAsync(DateTime date);
 
         Task AddTransactionAsync(Transaction transaction);
-
-        Task<bool> UpdateTransactionAsync(Transaction transaction);
-
-        Task<bool> DeleteTransactionAsync(Guid id);
     }
 }
