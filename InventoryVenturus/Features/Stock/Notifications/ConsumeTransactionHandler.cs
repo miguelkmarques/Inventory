@@ -1,6 +1,13 @@
-﻿namespace InventoryVenturus.Features.Stock.Notifications
+﻿using InventoryVenturus.Repositories.Interfaces;
+using MediatR;
+
+namespace InventoryVenturus.Features.Stock.Notifications
 {
-    public class ConsumeTransactionHandler
+    public class ConsumeTransactionHandler(ILogger<ConsumeTransactionHandler> logger, ITransactionRepository transactionRepository) : INotificationHandler<StockConsumedNotification>
     {
+        public Task Handle(StockConsumedNotification notification, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
