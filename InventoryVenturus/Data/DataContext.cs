@@ -18,12 +18,30 @@ namespace InventoryVenturus.Data
 
         public async Task InitDatabase()
         {
-            using var connection = CreateConnection();
-            connection.Open();
-            await CreateProductsTableAsync(connection);
-            await CreateTransactionsTableAsync(connection);
-            await CreateStockTableAsync(connection);
-            await CreateErrorLogsTableAsync(connection);
+            const int maxRetries = 5;
+            int retryCount = 0;
+            TimeSpan delay = TimeSpan.FromSeconds(2);
+
+            // wait for the database to be ready
+            while (true)
+            {
+                try
+                {
+                    using var connection = CreateConnection();
+                    connection.Open();
+                    await CreateProductsTableAsync(connection);
+                    await CreateTransactionsTableAsync(connection);
+                    await CreateStockTableAsync(connection);
+                    await CreateErrorLogsTableAsync(connection);
+                    break;
+                }
+                catch (Exception) when (retryCount < maxRetries)
+                {
+                    retryCount++;
+                    await Task.Delay(delay);
+                    delay *= 2;
+                }
+            }
         }
 
         private static async Task CreateProductsTableAsync(IDbConnection connection)
