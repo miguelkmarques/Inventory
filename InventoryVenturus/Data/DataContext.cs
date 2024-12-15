@@ -2,9 +2,11 @@
 using InventoryVenturus.Data.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InventoryVenturus.Data
 {
+    [ExcludeFromCodeCoverage]
     public class DataContext(IConfiguration configuration) : IDataContext
     {
         private readonly string _connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("DefaultConnection not set");
