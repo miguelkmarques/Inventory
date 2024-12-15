@@ -5,9 +5,14 @@ namespace InventoryVenturus.Features.Stock.Queries.Get
 {
     public class GetStockQueryHandler(IStockRepository stockRepository) : IRequestHandler<GetStockQuery, int?>
     {
-        public Task<int?> Handle(GetStockQuery request, CancellationToken cancellationToken)
+        public async Task<int?> Handle(GetStockQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var stock = await stockRepository.GetStockByProductIdAsync(request.ProductId);
+            if (stock is null)
+            {
+                return null;
+            }
+            return stock.Quantity;
         }
     }
 }
