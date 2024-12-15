@@ -1,4 +1,5 @@
-﻿using InventoryVenturus.Features.Stock.Commands.Consume;
+﻿using InventoryVenturus.Exceptions;
+using InventoryVenturus.Features.Stock.Commands.Consume;
 using InventoryVenturus.Features.Stock.Notifications;
 using InventoryVenturus.Repositories.Interfaces;
 using MediatR;
@@ -74,7 +75,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Commands.Consume
             _productRepositoryMock.Setup(repo => repo.GetProductByIdAsync(command.ProductId)).ReturnsAsync(existingProduct);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<InsufficientStockException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]

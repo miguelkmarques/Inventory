@@ -1,4 +1,5 @@
-﻿using InventoryVenturus.Features.Stock.Notifications;
+﻿using InventoryVenturus.Exceptions;
+using InventoryVenturus.Features.Stock.Notifications;
 using InventoryVenturus.Repositories.Interfaces;
 using MediatR;
 using System.Transactions;
@@ -18,11 +19,12 @@ namespace InventoryVenturus.Features.Stock.Commands.Consume
                 {
                     return false;
                 }
-                existingStock.Quantity -= command.Quantity;
-                if (existingStock.Quantity < 0)
+                var updatedQuantity = existingStock.Quantity - command.Quantity;
+                if (updatedQuantity < 0)
                 {
-                    throw new InvalidOperationException("Insufficient stock to consume the requested quantity.");
+                    throw new InsufficientStockException(command.ProductId, command.Quantity, existingStock.Quantity);
                 }
+                existingStock.Quantity = updatedQuantity;
                 var result = await stockRepository.UpdateStockAsync(existingStock);
                 if (result)
                 {

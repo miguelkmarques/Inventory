@@ -1,4 +1,5 @@
-﻿using InventoryVenturus.Features.Products.Commands.Create;
+﻿using InventoryVenturus.Exceptions;
+using InventoryVenturus.Features.Products.Commands.Create;
 using InventoryVenturus.Features.Products.Commands.Delete;
 using InventoryVenturus.Features.Products.Commands.Update;
 using InventoryVenturus.Features.Products.Dtos;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace InventoryVenturus.Controllers
 {
@@ -44,7 +46,7 @@ namespace InventoryVenturus.Controllers
             var product = await mediator.Send(new GetProductQuery(id));
             if (product is null)
             {
-                return NotFound();
+                throw new ProductNotFoundException(id);
             }
             return Ok(product);
         }
@@ -75,13 +77,13 @@ namespace InventoryVenturus.Controllers
         {
             if (id != command.Id)
             {
-                return BadRequest();
+                throw new BaseException("The ID in the URL does not match the ID in the request body.", HttpStatusCode.BadRequest);
             }
 
             var result = await mediator.Send(command);
             if (!result)
             {
-                return NotFound();
+                throw new ProductNotFoundException(id);
             }
 
             return NoContent();
@@ -100,7 +102,7 @@ namespace InventoryVenturus.Controllers
             var result = await mediator.Send(new DeleteProductCommand(id));
             if (!result)
             {
-                return NotFound();
+                throw new ProductNotFoundException(id);
             }
 
             return NoContent();

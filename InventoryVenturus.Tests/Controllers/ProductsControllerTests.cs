@@ -1,4 +1,5 @@
 ﻿using InventoryVenturus.Controllers;
+using InventoryVenturus.Exceptions;
 using InventoryVenturus.Features.Products.Commands.Create;
 using InventoryVenturus.Features.Products.Commands.Delete;
 using InventoryVenturus.Features.Products.Commands.Update;
@@ -68,18 +69,15 @@ namespace InventoryVenturus.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetProductById_ReturnsNotFoundResult_WhenProductDoesNotExist()
+        public async Task GetProductById_ThrowsException_WhenProductDoesNotExist()
         {
             // Arrange
             var productId = Guid.NewGuid();
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetProductQuery>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync((ProductDto?)null);
 
-            // Act
-            var result = await _controller.GetProductById(productId);
-
-            // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
+            // Act & Assert
+            await Assert.ThrowsAsync<ProductNotFoundException>(() => _controller.GetProductById(productId));
         }
 
         [Fact]
@@ -133,34 +131,26 @@ namespace InventoryVenturus.Tests.Controllers
         }
 
         [Fact]
-        public async Task UpdateProduct_ReturnsBadRequest_WhenIdMismatch()
+        public async Task UpdateProduct_ThrowsException_WhenIdMismatch()
         {
             // Arrange
             var command = UpdateProductCommandTestData.ValidCommand;
             var differentId = Guid.NewGuid();
 
-            // Act
-            var result = await _controller.UpdateProduct(differentId, command);
-
-            // Assert
-            var badRequestResult = Assert.IsType<BadRequestResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
+            // Act & Assert
+            await Assert.ThrowsAsync<BaseException>(() => _controller.UpdateProduct(differentId, command));
         }
 
         [Fact]
-        public async Task UpdateProduct_ReturnsNotFound_WhenUpdateFails()
+        public async Task UpdateProduct_ThrowsException_WhenUpdateFails()
         {
             // Arrange
             var command = UpdateProductCommandTestData.ValidCommand;
             _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync(false);
 
-            // Act
-            var result = await _controller.UpdateProduct(command.Id, command);
-
-            // Assert
-            var notFoundResult = Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
+            // Act & Assert
+            await Assert.ThrowsAsync<ProductNotFoundException>(() => _controller.UpdateProduct(command.Id, command));
         }
 
         [Fact]
@@ -180,19 +170,15 @@ namespace InventoryVenturus.Tests.Controllers
         }
 
         [Fact]
-        public async Task DeleteProduct_ReturnsNotFound_WhenDeleteFails()
+        public async Task DeleteProduct_ThrowsException_WhenDeleteFails()
         {
             // Arrange
             var productId = Guid.NewGuid();
             _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProductCommand>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync(false);
 
-            // Act
-            var result = await _controller.DeleteProduct(productId);
-
-            // Assert
-            var notFoundResult = Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
+            // Act & Assert
+            await Assert.ThrowsAsync<ProductNotFoundException>(() => _controller.DeleteProduct(productId));
         }
     }
 }

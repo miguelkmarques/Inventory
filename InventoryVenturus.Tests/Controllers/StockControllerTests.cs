@@ -1,4 +1,5 @@
 ﻿using InventoryVenturus.Controllers;
+using InventoryVenturus.Exceptions;
 using InventoryVenturus.Features.Stock.Commands.Add;
 using InventoryVenturus.Features.Stock.Commands.Consume;
 using InventoryVenturus.Features.Stock.Queries.Get;
@@ -44,18 +45,15 @@ namespace InventoryVenturus.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetStock_ReturnsNotFoundResult_WhenStockDoesNotExist()
+        public async Task GetStock_ThrowsException_WhenStockDoesNotExist()
         {
             // Arrange
             var productId = Guid.NewGuid();
             _mediatorMock.Setup(m => m.Send(It.IsAny<GetStockQuery>(), It.IsAny<CancellationToken>()))
                          .ReturnsAsync((int?)null);
 
-            // Act
-            var result = await _controller.GetStock(productId);
-
-            // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
+            // Act & Assert
+            await Assert.ThrowsAsync<ProductNotFoundException>(() => _controller.GetStock(productId));
         }
 
         [Fact]
@@ -91,19 +89,15 @@ namespace InventoryVenturus.Tests.Controllers
         }
 
         [Fact]
-        public async Task ConsumeStock_ReturnsBadRequest_WhenConsumeFails()
+        public async Task ConsumeStock_ThrowsException_WhenConsumeFails()
         {
             // Arrange
             var command = new ConsumeStockCommand(Guid.NewGuid(), 5);
             _mediatorMock.Setup(m => m.Send(It.IsAny<ConsumeStockCommand>(), It.IsAny<CancellationToken>()))
-                         .ThrowsAsync(new Exception("Insufficient stock"));
+                         .ThrowsAsync(new InsufficientStockException(command.ProductId, command.Quantity, 0));
 
-            // Act
-            var result = await _controller.ConsumeStock(command);
-
-            // Assert
-            var badRequestResult = Assert.IsType<BadRequestResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
+            // Act & Assert
+            await Assert.ThrowsAsync<InsufficientStockException>(() => _controller.ConsumeStock(command));
         }
     }
 }

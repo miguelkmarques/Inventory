@@ -1,4 +1,5 @@
 ﻿using InventoryVenturus.Domain;
+using InventoryVenturus.Exceptions;
 using InventoryVenturus.Features.Stock.Commands.Add;
 using InventoryVenturus.Features.Stock.Commands.Consume;
 using InventoryVenturus.Features.Stock.Queries.Get;
@@ -26,7 +27,7 @@ namespace InventoryVenturus.Controllers
             var stock = await mediator.Send(new GetStockQuery(productId));
             if (stock is null)
             {
-                return NotFound();
+                throw new ProductNotFoundException(productId);
             }
             return Ok(stock);
         }
@@ -44,7 +45,7 @@ namespace InventoryVenturus.Controllers
             var result = await mediator.Send(command);
             if (!result)
             {
-                return NotFound();
+                throw new ProductNotFoundException(command.ProductId);
             }
             return NoContent();
         }
@@ -59,19 +60,12 @@ namespace InventoryVenturus.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "The request is invalid.", typeof(ProblemDetails))]
         public async Task<ActionResult> ConsumeStock([FromBody] ConsumeStockCommand command)
         {
-            try
+            var result = await mediator.Send(command);
+            if (!result)
             {
-                var result = await mediator.Send(command);
-                if (!result)
-                {
-                    return NotFound();
-                }
-                return NoContent();
+                throw new ProductNotFoundException(command.ProductId);
             }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            return NoContent();
         }
     }
 }

@@ -44,7 +44,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
         }
 
         [Fact]
-        public async Task Handle_ShouldLogError_WhenExceptionIsThrown()
+        public async Task Handle_ShouldThrowException_WhenExceptionIsThrown()
         {
             // Arrange
             var notification = new StockConsumedNotification(Guid.NewGuid(), 5, 50);

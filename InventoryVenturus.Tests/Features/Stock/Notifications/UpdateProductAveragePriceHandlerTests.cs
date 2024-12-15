@@ -1,4 +1,5 @@
 ﻿using InventoryVenturus.Domain;
+using InventoryVenturus.Exceptions;
 using InventoryVenturus.Features.Stock.Notifications;
 using InventoryVenturus.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -52,7 +53,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
             _productRepositoryMock.Setup(repo => repo.UpdateAveragePriceAsync(notification.ProductId, It.IsAny<decimal>())).ReturnsAsync(false);
 
             // Act
-            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(notification, CancellationToken.None));
+            await Assert.ThrowsAsync<ProductNotFoundException>(() => _handler.Handle(notification, CancellationToken.None));
 
             // Assert
             _productRepositoryMock.Verify(repo => repo.GetProductByIdAsync(notification.ProductId), Times.Once);

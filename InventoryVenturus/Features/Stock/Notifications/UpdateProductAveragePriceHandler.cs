@@ -1,4 +1,5 @@
-﻿using InventoryVenturus.Features.Products.Notifications;
+﻿using InventoryVenturus.Exceptions;
+using InventoryVenturus.Features.Products.Notifications;
 using InventoryVenturus.Repositories.Interfaces;
 using MediatR;
 
@@ -10,20 +11,16 @@ namespace InventoryVenturus.Features.Stock.Notifications
         {
             try
             {
-                var existingProduct = await productRepository.GetProductByIdAsync(notification.ProductId) ?? throw new Exception($"Product with ID {notification.ProductId} not found.");
+                var existingProduct = await productRepository.GetProductByIdAsync(notification.ProductId) ?? throw new ProductNotFoundException(notification.ProductId);
 
                 var updatedAveragePrice = ((existingProduct.Price * (notification.FinalQuantity - notification.AddedQuantity)) + (notification.Price * notification.AddedQuantity)) / notification.FinalQuantity;
 
-                var result = await productRepository.UpdateAveragePriceAsync(existingProduct.Id, updatedAveragePrice);    
-
-                if (result)
+                var result = await productRepository.UpdateAveragePriceAsync(existingProduct.Id, updatedAveragePrice);
+                if (!result)
                 {
-                    logger.LogInformation("Product Average Price updated for product with ID: {Id}", notification.ProductId);
+                    throw new ProductNotFoundException(notification.ProductId);
                 }
-                else
-                {
-                    throw new Exception($"Error updating Product Average Price for product with ID: {notification.ProductId}");
-                }
+                logger.LogInformation("Product Average Price updated for product with ID: {Id}", notification.ProductId);
             }
             catch (Exception ex)
             {

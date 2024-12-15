@@ -24,7 +24,11 @@ namespace InventoryVenturus.Exceptions
                 }
                 problemDetails.Extensions.Add("errors", validationErrors);
             }
-
+            else if (exception is BaseException e)
+            {
+                httpContext.Response.StatusCode = (int)e.StatusCode;
+                problemDetails.Title = e.Message;
+            }
             else
             {
                 problemDetails.Title = exception.Message;
