@@ -12,10 +12,10 @@ namespace InventoryVenturus.Repositories
     {
         private IDbConnection Connection => dataContext.CreateConnection();
 
-        public async Task<IEnumerable<Transaction>> GetTransactionsByDateAsync(DateTime date)
+        public async Task<IEnumerable<Transaction>> GetConsumptionTransactionsByDateAsync(DateTime date)
         {
             using IDbConnection dbConnection = Connection;
-            string query = "SELECT * FROM Transactions WHERE CAST(TransactionDate AS DATE) = @Date";
+            string query = "SELECT * FROM Transactions WHERE CAST(TransactionDate AS DATE) = @Date and TransactionType = 1";
             dbConnection.Open();
             return await dbConnection.QueryAsync<Transaction>(query, new { date.Date });
         }

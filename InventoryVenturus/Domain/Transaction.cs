@@ -2,8 +2,8 @@
 {
     public enum TransactionType
     {
-        Addition,
-        Consumption
+        Addition = 0,
+        Consumption = 1
     }
 
     public class Transaction

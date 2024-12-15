@@ -8,7 +8,7 @@ namespace InventoryVenturus.Features.Transactions.Queries.GetDailyConsumption
     {
         public async Task<List<DailyConsumptionDto>> Handle(GetDailyConsumptionQuery request, CancellationToken cancellationToken)
         {
-            var transactions = await transactionRepository.GetTransactionsByDateAsync(request.Date);
+            var transactions = await transactionRepository.GetConsumptionTransactionsByDateAsync(request.Date);
 
             var dailyTransactions = transactions
                 .GroupBy(t => t.ProductId)

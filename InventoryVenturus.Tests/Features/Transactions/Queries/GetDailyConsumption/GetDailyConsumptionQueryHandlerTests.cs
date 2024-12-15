@@ -34,7 +34,7 @@ namespace InventoryVenturus.Tests.Features.Transactions.Queries.GetDailyConsumpt
                 new(Guid.NewGuid(), 3, TransactionType.Consumption, date, 12)
             };
 
-            _transactionRepositoryMock.Setup(repo => repo.GetTransactionsByDateAsync(date))
+            _transactionRepositoryMock.Setup(repo => repo.GetConsumptionTransactionsByDateAsync(date))
                 .ReturnsAsync(transactions);
 
             var query = new GetDailyConsumptionQuery(date);
@@ -65,7 +65,7 @@ namespace InventoryVenturus.Tests.Features.Transactions.Queries.GetDailyConsumpt
             var date = new DateTime(2024, 12, 15);
             var transactions = new List<Transaction>();
 
-            _transactionRepositoryMock.Setup(repo => repo.GetTransactionsByDateAsync(date))
+            _transactionRepositoryMock.Setup(repo => repo.GetConsumptionTransactionsByDateAsync(date))
                 .ReturnsAsync(transactions);
 
             var query = new GetDailyConsumptionQuery(date);
