@@ -22,7 +22,10 @@ namespace InventoryVenturus.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "No consumption records found for the specified date.", typeof(ProblemDetails))]
         public async Task<ActionResult<IEnumerable<DailyConsumptionDto>>> GetDailyConsumption([FromQuery] DateTime? date)
         {
-            throw new NotImplementedException();
+            var queryDate = date ?? DateTime.UtcNow.Date;
+            var dailyConsumption = await mediator.Send(new GetDailyConsumptionQuery(queryDate));
+
+            return Ok(dailyConsumption);
         }
     }
 }
