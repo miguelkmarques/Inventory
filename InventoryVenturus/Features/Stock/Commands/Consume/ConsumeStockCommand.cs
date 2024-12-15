@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using InventoryVenturus.Features.Common;
 using MediatR;
 
 namespace InventoryVenturus.Features.Stock.Commands.Consume
@@ -10,11 +11,10 @@ namespace InventoryVenturus.Features.Stock.Commands.Consume
         public ConsumeStockCommandValidator()
         {
             RuleFor(x => x.ProductId)
-                .NotEmpty().WithMessage("ProductId is required.");
+                .ValidateId("ProductId");
 
             RuleFor(x => x.Quantity)
-                .NotEmpty().WithMessage("Quantity is required.")
-                .GreaterThan(0).WithMessage("Quantity must be greater than 0.");
+                .ValidateQuantity();
         }
     }
 

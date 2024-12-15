@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using InventoryVenturus.Features.Common;
 using MediatR;
 
 namespace InventoryVenturus.Features.Products.Commands.Create
@@ -10,12 +11,10 @@ namespace InventoryVenturus.Features.Products.Commands.Create
         public CreateProductCommandValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(100).WithMessage("Name must not exceed 255 characters.");
+                .ValidateName();
 
             RuleFor(x => x.Partnumber)
-                .NotEmpty().WithMessage("Partnumber is required.")
-                .MaximumLength(50).WithMessage("Partnumber must not exceed 255 characters.");
+                .ValidatePartnumber();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using InventoryVenturus.Features.Common;
 using MediatR;
 
 namespace InventoryVenturus.Features.Products.Notifications
@@ -10,7 +11,7 @@ namespace InventoryVenturus.Features.Products.Notifications
         public ProductDeletionRequestedNotificationValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Id is required.");
+                .ValidateId();
         }
     }
 }

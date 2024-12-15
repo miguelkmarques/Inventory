@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using InventoryVenturus.Features.Common;
 using MediatR;
 
 namespace InventoryVenturus.Features.Products.Commands.Delete
@@ -10,7 +11,7 @@ namespace InventoryVenturus.Features.Products.Commands.Delete
         public DeleteProductCommandValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Id is required.");
+                .ValidateId();
         }
     }
 }
