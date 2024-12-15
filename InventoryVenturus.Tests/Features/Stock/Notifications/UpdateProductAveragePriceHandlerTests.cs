@@ -40,6 +40,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
             // Assert
             _productRepositoryMock.Verify(repo => repo.GetProductByIdAsync(notification.ProductId), Times.Once);
             var expectedAveragePrice = ((existingProduct.Price * (notification.FinalQuantity - notification.AddedQuantity)) + (notification.UnitPrice * notification.AddedQuantity)) / notification.FinalQuantity;
+            expectedAveragePrice = Math.Round(expectedAveragePrice, 2);
             _productRepositoryMock.Verify(repo => repo.UpdateAveragePriceAsync(notification.ProductId, It.Is<decimal>(price => price == expectedAveragePrice)), Times.Once);
         }
 
