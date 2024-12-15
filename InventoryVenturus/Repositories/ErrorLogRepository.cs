@@ -3,9 +3,11 @@ using InventoryVenturus.Data.Interfaces;
 using InventoryVenturus.Domain;
 using InventoryVenturus.Repositories.Interfaces;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InventoryVenturus.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class ErrorLogRepository(IDataContext dataContext) : IErrorLogRepository
     {
         private IDbConnection Connection => dataContext.CreateConnection();

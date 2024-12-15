@@ -3,9 +3,11 @@ using InventoryVenturus.Repositories.Interfaces;
 using Dapper;
 using System.Data;
 using InventoryVenturus.Data.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InventoryVenturus.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class ProductRepository(IDataContext dataContext) : IProductRepository
     {
         private IDbConnection Connection => dataContext.CreateConnection();
