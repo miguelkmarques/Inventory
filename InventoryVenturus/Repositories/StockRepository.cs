@@ -12,14 +12,6 @@ namespace InventoryVenturus.Repositories
     {
         private IDbConnection Connection => dataContext.CreateConnection();
 
-        public async Task<IEnumerable<Stock>> GetAllStockAsync()
-        {
-            using IDbConnection dbConnection = Connection;
-            string query = "SELECT * FROM Stock";
-            dbConnection.Open();
-            return await dbConnection.QueryAsync<Stock>(query);
-        }
-
         public async Task<Stock?> GetStockByProductIdAsync(Guid productId)
         {
             using IDbConnection dbConnection = Connection;
@@ -31,7 +23,7 @@ namespace InventoryVenturus.Repositories
         public async Task AddStockAsync(Stock stock)
         {
             using IDbConnection dbConnection = Connection;
-            string query = "INSERT INTO Stock (Id, ProductId, Quantity) VALUES (@Id, @ProductId, @Quantity)";
+            string query = "INSERT INTO Stock (ProductId, Quantity) VALUES (@ProductId, @Quantity)";
             dbConnection.Open();
             await dbConnection.ExecuteAsync(query, stock);
         }
@@ -39,7 +31,7 @@ namespace InventoryVenturus.Repositories
         public async Task<bool> UpdateStockAsync(Stock stock)
         {
             using IDbConnection dbConnection = Connection;
-            string query = "UPDATE Stock SET ProductId = @ProductId, Quantity = @Quantity WHERE Id = @Id";
+            string query = "UPDATE Stock SET Quantity = @Quantity WHERE ProductId = @ProductId";
             dbConnection.Open();
             var rowsAffected = await dbConnection.ExecuteAsync(query, stock);
             return rowsAffected > 0;
@@ -48,9 +40,9 @@ namespace InventoryVenturus.Repositories
         public async Task<bool> DeleteStockAsync(Guid id)
         {
             using IDbConnection dbConnection = Connection;
-            string query = "DELETE FROM Stock WHERE Id = @Id";
+            string query = "DELETE FROM Stock WHERE ProductId = @ProductId";
             dbConnection.Open();
-            var rowsAffected = await dbConnection.ExecuteAsync(query, new { Id = id });
+            var rowsAffected = await dbConnection.ExecuteAsync(query, new { ProductId = id });
             return rowsAffected > 0;
         }
     }

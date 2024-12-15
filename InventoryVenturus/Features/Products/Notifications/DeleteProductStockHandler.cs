@@ -9,19 +9,15 @@ namespace InventoryVenturus.Features.Products.Notifications
         {
             try
             {
-                var stock = await stockRepository.GetStockByProductIdAsync(notification.Id);
-                if (stock != null)
+                var result = await stockRepository.DeleteStockAsync(notification.Id);
+                if (result)
                 {
-                    var result = await stockRepository.DeleteStockAsync(stock.Id);
-                    if (result)
-                    {
-                        logger.LogInformation("Stock deleted for product with ID: {Id}", notification.Id);
+                    logger.LogInformation("Stock deleted for product with ID: {Id}", notification.Id);
 
-                    }
-                    else
-                    {
-                        logger.LogInformation("Stock not found for product with ID: {Id}", notification.Id);
-                    }
+                }
+                else
+                {
+                    logger.LogInformation("Stock not found for product with ID: {Id}", notification.Id);
                 }
             }
             catch (Exception ex)

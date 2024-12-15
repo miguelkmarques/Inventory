@@ -58,12 +58,11 @@ namespace InventoryVenturus.Data
         {
             string query = @"
                 CREATE TABLE IF NOT EXISTS Stock (
-                    Id CHAR(36) NOT NULL,
-                    ProductId CHAR(36) NOT NULL,
-                    Quantity INT NOT NULL,
-                    PRIMARY KEY (Id),
-                    FOREIGN KEY (ProductId) REFERENCES Products(Id)
-                )";
+            ProductId CHAR(36) NOT NULL,
+            Quantity INT NOT NULL,
+            PRIMARY KEY (ProductId),
+            FOREIGN KEY (ProductId) REFERENCES Products(Id)
+            )";
 
             await connection.ExecuteAsync(query);
         }

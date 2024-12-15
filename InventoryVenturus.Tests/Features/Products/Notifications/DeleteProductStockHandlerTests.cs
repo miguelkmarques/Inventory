@@ -29,34 +29,36 @@ namespace InventoryVenturus.Tests.Features.Products.Notifications
         {
             // Arrange
             var notification = new ProductDeletionRequestedNotification(Guid.NewGuid());
-            var stock = new Domain.Stock(Guid.NewGuid(), 0)
-            {
-                ProductId = notification.Id
-            };
-            _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(notification.Id)).ReturnsAsync(stock);
-            _stockRepositoryMock.Setup(repo => repo.DeleteStockAsync(stock.Id)).ReturnsAsync(true);
+            _stockRepositoryMock.Setup(repo => repo.DeleteStockAsync(notification.Id)).ReturnsAsync(true);
 
             // Act
             await _handler.Handle(notification, CancellationToken.None);
 
             // Assert
-            _stockRepositoryMock.Verify(repo => repo.GetStockByProductIdAsync(notification.Id), Times.Once);
-            _stockRepositoryMock.Verify(repo => repo.DeleteStockAsync(stock.Id), Times.Once);
+            _stockRepositoryMock.Verify(repo => repo.DeleteStockAsync(notification.Id), Times.Once);
         }
 
         [Fact]
-        public async Task Handle_ShouldNotDeleteStockRecord_WhenStockNotFound()
+        public async Task Handle_ShouldNotThrowException_WhenStockNotFound()
         {
             // Arrange
             var notification = new ProductDeletionRequestedNotification(Guid.NewGuid());
-            _stockRepositoryMock.Setup(repo => repo.GetStockByProductIdAsync(notification.Id)).ReturnsAsync((Domain.Stock?)null);
+            _stockRepositoryMock.Setup(repo => repo.DeleteStockAsync(notification.Id)).ReturnsAsync(false);
 
-            // Act
-            await _handler.Handle(notification, CancellationToken.None);
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(() => _handler.Handle(notification, CancellationToken.None));
+            Assert.Null(exception);
+        }
 
-            // Assert
-            _stockRepositoryMock.Verify(repo => repo.GetStockByProductIdAsync(notification.Id), Times.Once);
-            _stockRepositoryMock.Verify(repo => repo.DeleteStockAsync(It.IsAny<Guid>()), Times.Never);
+        [Fact]
+        public async Task Handle_ShouldThrowException_WhenRepositoryThrowsException()
+        {
+            // Arrange
+            var notification = new ProductDeletionRequestedNotification(Guid.NewGuid());
+            _stockRepositoryMock.Setup(repo => repo.DeleteStockAsync(notification.Id)).ThrowsAsync(new Exception("Repository exception"));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(notification, CancellationToken.None));
         }
     }
 }
