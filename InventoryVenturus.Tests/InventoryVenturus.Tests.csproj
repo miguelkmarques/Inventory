@@ -25,8 +25,4 @@
     <ProjectReference Include="..\InventoryVenturus\InventoryVenturus.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Stock\Queries\Get\" />
-  </ItemGroup>
-
 </Project>
