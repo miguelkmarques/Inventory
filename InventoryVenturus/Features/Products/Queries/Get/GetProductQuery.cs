@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using InventoryVenturus.Features.Common;
 using InventoryVenturus.Features.Products.Dtos;
 using InventoryVenturus.Features.Products.Notifications;
 using MediatR;
@@ -12,7 +13,7 @@ namespace InventoryVenturus.Features.Products.Queries.Get
         public GetProductQueryValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Id is required.");
+                .ValidateId();
         }
     }
 }
