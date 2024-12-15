@@ -3,7 +3,7 @@ using MediatR;
 
 namespace InventoryVenturus.Features.Stock.Commands.Add
 {
-    public record AddStockCommand(Guid ProductId, int Quantity, decimal Price) : IRequest<bool>;
+    public record AddStockCommand(Guid ProductId, int Quantity, decimal UnitPrice) : IRequest<bool>;
 
     public class AddStockCommandValidator : AbstractValidator<AddStockCommand>
     {
@@ -16,7 +16,7 @@ namespace InventoryVenturus.Features.Stock.Commands.Add
                 .NotEmpty().WithMessage("Quantity is required.")
                 .GreaterThan(0).WithMessage("Quantity must be greater than 0.");
 
-            RuleFor(x => x.Price)
+            RuleFor(x => x.UnitPrice)
                 .NotEmpty().WithMessage("Price is required.")
                 .GreaterThan(0).WithMessage("Price must be greater than 0.");
         }

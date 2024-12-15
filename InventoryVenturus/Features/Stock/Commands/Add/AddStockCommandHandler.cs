@@ -23,7 +23,7 @@ namespace InventoryVenturus.Features.Stock.Commands.Add
                 var result = await stockRepository.UpdateStockAsync(existingStock);
                 if (result)
                 {
-                    await mediator.Publish(new StockAddedNotification(existingStock.ProductId, command.Quantity, existingStock.Quantity, command.Price), cancellationToken);
+                    await mediator.Publish(new StockAddedNotification(existingStock.ProductId, command.Quantity, existingStock.Quantity, command.UnitPrice), cancellationToken);
                     transactionScope.Complete();
                 }
                 return result;

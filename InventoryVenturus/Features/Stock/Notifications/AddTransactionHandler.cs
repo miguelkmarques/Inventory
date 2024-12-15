@@ -11,7 +11,7 @@ namespace InventoryVenturus.Features.Stock.Notifications
         {
             try
             {
-                var transaction = new Transaction(notification.ProductId, notification.AddedQuantity, TransactionType.Addition, DateTime.UtcNow, notification.Price);
+                var transaction = new Transaction(notification.ProductId, notification.AddedQuantity, TransactionType.Addition, DateTime.UtcNow, notification.UnitPrice);
 
                 await transactionRepository.AddTransactionAsync(transaction);
 

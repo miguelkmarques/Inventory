@@ -40,7 +40,7 @@ namespace InventoryVenturus.Tests.Features.Stock.Notifications
                 t.ProductId == notification.ProductId &&
                 t.Quantity == notification.AddedQuantity &&
                 t.TransactionType == TransactionType.Addition &&
-                t.Cost == notification.Price
+                t.Cost == notification.UnitPrice
             )), Times.Once);
         }
 

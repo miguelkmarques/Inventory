@@ -13,7 +13,7 @@ namespace InventoryVenturus.Features.Stock.Notifications
             {
                 var existingProduct = await productRepository.GetProductByIdAsync(notification.ProductId) ?? throw new ProductNotFoundException(notification.ProductId);
 
-                var updatedAveragePrice = ((existingProduct.Price * (notification.FinalQuantity - notification.AddedQuantity)) + (notification.Price * notification.AddedQuantity)) / notification.FinalQuantity;
+                var updatedAveragePrice = ((existingProduct.Price * (notification.FinalQuantity - notification.AddedQuantity)) + (notification.UnitPrice * notification.AddedQuantity)) / notification.FinalQuantity;
 
                 var result = await productRepository.UpdateAveragePriceAsync(existingProduct.Id, updatedAveragePrice);
                 if (!result)

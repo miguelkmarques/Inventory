@@ -4,7 +4,7 @@ using MediatR;
 
 namespace InventoryVenturus.Features.Stock.Notifications
 {
-    public record StockAddedNotification(Guid ProductId, int AddedQuantity, int FinalQuantity, decimal Price) : INotification;
+    public record StockAddedNotification(Guid ProductId, int AddedQuantity, int FinalQuantity, decimal UnitPrice) : INotification;
 
     public class StockAddedNotificationValidator : AbstractValidator<StockAddedNotification>
     {
@@ -21,7 +21,7 @@ namespace InventoryVenturus.Features.Stock.Notifications
                 .NotEmpty().WithMessage("FinalQuantity is required.")
                 .GreaterThan(0).WithMessage("FinalQuantity must be greater than 0.");
 
-            RuleFor(x => x.Price)
+            RuleFor(x => x.UnitPrice)
                 .NotEmpty().WithMessage("Price is required.")
                 .GreaterThan(0).WithMessage("Price must be greater than 0.");
         }
