@@ -28,5 +28,14 @@ namespace InventoryVenturus.Repositories
             dbConnection.Open();
             await dbConnection.ExecuteAsync(query, transaction);
         }
+
+        public async Task<int> DeleteProductTransactionsAsync(Guid productId)
+        {
+            using IDbConnection dbConnection = Connection;
+            string query = "DELETE FROM Transactions WHERE ProductId = @ProductId";
+            dbConnection.Open();
+            var rowsAffected = await dbConnection.ExecuteAsync(query, new { ProductId = productId });
+            return rowsAffected;
+        }
     }
 }

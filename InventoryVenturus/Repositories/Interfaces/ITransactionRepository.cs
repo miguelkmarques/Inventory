@@ -7,5 +7,7 @@ namespace InventoryVenturus.Repositories.Interfaces
         Task<IEnumerable<Transaction>> GetConsumptionTransactionsByDateAsync(DateTime date);
 
         Task AddTransactionAsync(Transaction transaction);
+
+        Task<int> DeleteProductTransactionsAsync(Guid productId);
     }
 }
